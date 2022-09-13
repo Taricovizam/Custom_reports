@@ -1,0 +1,30 @@
+SELECT 
+  inv.no "Document Number", 
+  inv.date "Invoice Date",
+  
+  inv.summary_total 'Invoice Amount', 
+  inv.summary_paid 'Paid', 
+  inv.summary_unpaid 'Amount Due', 
+  (	
+    SELECT 
+      value 
+    FROM 
+      `invoice_custom_fields` 
+    WHERE 
+      label = 'PO Number' 
+      AND inv.id = invoice_id
+  ) "Customer PO", 
+  (
+    SELECT 
+      value 
+    FROM 
+      `invoice_custom_fields` 
+    WHERE 
+      label = 'Project' 
+      AND inv.id = invoice_id
+  ) "Description", 
+  DATEDIFF(CURDATE(), inv.date) "Days"
+
+FROM 
+  invoices inv
+ORDER BY inv.date DESC;

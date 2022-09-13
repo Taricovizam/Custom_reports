@@ -1,0 +1,333 @@
+{
+  "modelName": "Invoice",
+  "title": "Statement of Accounts (SOA)",
+  "table": "invoices inv",
+  "custom_table": "invoices",
+  "alias": "inv",
+
+  "fields": {
+    "no": {
+      "query": "inv.no inv_no",
+      "type": ""
+    },
+    "date": {
+      "query": "inv.date date",
+      "type": "DATE"
+    },
+    "total": {
+      "query": "inv.summary_total total",
+      "type": ""
+    },
+    "paid": {
+      "query": "inv.summary_paid paid",
+      "type": "PRICE",
+      "colored": true
+    },
+    "unpaid": {
+      "query": "inv.summary_unpaid unpaid",
+      "type": "PRICE",
+      "colored": true
+    },
+    "po": {
+      "query": "(SELECT value FROM `invoice_custom_fields` WHERE label IN ('PO Number', 'أمر شراء', 'PO') AND inv.id = invoice_id) as po",
+      "type": ""
+    },
+    "proj": {
+      "query": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'Project' AND inv.id = invoice_id) proj",
+      "type": ""
+    },
+    "days": {
+      "query": "IF(inv.payment_status <> 2, DATEDIFF(CURDATE(), inv.date), 0) days",
+      "type": ""
+    },
+    "client_name": {
+      "query": "inv.client_business_name client_name",
+      "type": ""
+    },
+
+    "currency_code": {
+      "query": "inv.currency_code"
+    }
+  },
+  "currency": {
+    "field": "currency_code",
+    "filter_field": "inv.currency_code",
+    "convert_fields": ["total", "paid", "unpaid"]
+  },
+
+  "display_fields": {
+    "inv_no": "Document Number",
+    "date": "Invoice Date",
+    "client_name": "Client Name",
+    "po": "Customer PO",
+    "proj": "Description",
+    "days": "Days",
+    "total": "Invoice Amount",
+    "paid": "Paid",
+    "unpaid": "Amount Due"
+  },
+
+  "allow_removed": false,
+  "removed_text": "[REMOVED]",
+  "group_fields": {
+    "total": "SUM",
+    "paid": "SUM",
+    "unpaid": "SUM"
+  },
+  "total_fields": {
+    "total": "SUM",
+    "paid": "SUM",
+    "unpaid": "SUM"
+  },
+  "filters": {
+    "from_date": {
+      "type": "date",
+      "input": {
+        "name": "from_date",
+        "type": "text",
+        "label": "From Date",
+        "class": "form-control hasDate",
+        "div": "form-group col-md-3"
+      },
+      "condition": "inv.date >= '$from_date'"
+    },
+    "to_date": {
+      "type": "date",
+      "input": {
+        "name": "to_date",
+        "type": "text",
+        "label": "To Date",
+        "class": "form-control hasDate",
+        "div": "form-group col-md-3"
+      },
+      "condition": "inv.date <= '$to_date' "
+    },
+    "invoice_no": {
+      "type": "text",
+      "input": {
+        "name": "invoice_no",
+        "type": "text",
+        "label": "Invoice No.",
+        "class": "form-control",
+        "div": "col-md-3"
+      },
+      "condition": "inv.no = '$invoice_no'"
+    },
+    "project_name": {
+      "type": "text",
+      "input": {
+        "name": "project_name",
+        "type": "text",
+        "label": "اسم المشروع",
+        "class": "form-control",
+        "div": "col-md-2"
+      },
+      "condition": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'Project' AND inv.id = invoice_id) = '$project_name'"
+    },
+    "po_no": {
+      "type": "text",
+      "input": {
+        "name": "po_no",
+        "type": "text",
+        "label": "رقم أمر الشراء",
+        "class": "form-control",
+        "div": "col-md-2"
+      },
+      "condition": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'PO Number' OR label = 'أمر شراء' AND inv.id = invoice_id) as po"
+    }, 
+    "client_id": {
+      "type": "select",
+      "input": {
+        "multiple": "multiple",
+        "label": "اسم العميل",
+        "name": "client_id",
+        "data-live-search": true,
+        "class": "form-control input-select",
+        "div": "form-group col-md-3",
+        "dynamic_options": {
+          "model": "clients",
+          "conditions": [
+
+          ],
+          "fields": [
+            "clients.id",
+            "clients.business_name"
+          ]
+        }
+      },
+      "condition": "C.id IN ($client_id) "
+    }
+  },
+  "joins": [
+    "LEFT join clients C on C.id = inv.client_id"
+  ],
+
+  "conditions": [
+    "inv.type NOT IN (3, 6)",
+    "inv.draft <> 1"
+  ],
+  "group_by": {
+    "Yearly": "DATE_FORMAT(inv.date,'%Y')",
+    "Monthly": "CONCAT(YEAR(inv.date), \"-\", LPAD(MONTH(inv.date), 2, 0))",
+    "Weekly": "DATE_ADD(inv.date, INTERVAL (0 - WEEKDAY(inv.date)) DAY)",
+    "Daily": "inv.date"
+  },
+  "has_summary": false,
+  "order_by": {
+    "Date Descending": "inv.date DESC",
+    "Date Ascending": "inv.date ASC",
+    "Number Descending": "inv.no DESC",
+    "Number Ascending": "inv.no ASC"
+  },
+  "default_group_by": "inv.id"
+}
+
+// ===================== Old ======================
+{
+  "modelName": "Invoice",
+  "title": "Statement of Accounts (SOA)",
+  "table": "invoices inv",
+  "custom_table": "invoices",
+  "alias": "inv",
+
+  "fields": {
+    "no": {
+      "query": "inv.no inv_no",
+      "type": ""
+    },
+    "date": {
+      "query": "inv.date date",
+      "type": "DATE"
+    },
+    "total": {
+      "query": "inv.summary_total total",
+      "type": ""
+    },
+    "paid": {
+      "query": "inv.summary_paid paid",
+      "type": "PRICE",
+      "colored": true
+    },
+    "unpaid": {
+      "query": "inv.summary_unpaid unpaid",
+      "type": "PRICE",
+      "colored": true
+    },
+    "po": {
+      "query": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'PO Number' AND inv.id = invoice_id) as po",
+      "type": ""
+    },
+    "proj": {
+      "query": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'Project' AND inv.id = invoice_id) proj",
+      "type": ""
+    },
+    "days": {
+      "query": "IF(inv.payment_status <> 2, DATEDIFF(CURDATE(), inv.date), 0) days",
+      "type": ""
+    },
+
+    "currency_code": {
+      "query": "inv.currency_code"
+    }
+  },
+  "currency": {
+    "field": "currency_code",
+    "filter_field": "inv.currency_code",
+    "convert_fields": ["total", "paid", "unpaid"]
+  },
+
+  "display_fields": {
+    "inv_no": "Document Number",
+    "date": "Invoice Date",
+    "po": "Customer PO",
+    "proj": "Description",
+    "days": "Days",
+    "total": "Invoice Amount",
+    "paid": "Paid",
+    "unpaid": "Amount Due"
+  },
+
+  "allow_removed": false,
+  "removed_text": "[REMOVED]",
+  "group_fields": {
+    "total": "SUM",
+    "paid": "SUM",
+    "unpaid": "SUM"
+  },
+  "total_fields": {
+    "total": "SUM",
+    "paid": "SUM",
+    "unpaid": "SUM"
+  },
+  "filters": {
+    "from_date": {
+      "type": "date",
+      "input": {
+        "name": "from_date",
+        "type": "text",
+        "label": "From Date",
+        "class": "form-control hasDate",
+        "div": "form-group col-md-3"
+      },
+      "condition": "inv.date >= '$from_date'"
+    },
+    "to_date": {
+      "type": "date",
+      "input": {
+        "name": "to_date",
+        "type": "text",
+        "label": "To Date",
+        "class": "form-control hasDate",
+        "div": "form-group col-md-3"
+      },
+      "condition": "inv.date <= '$to_date' "
+    },
+    "invoice_no": {
+      "type": "text",
+      "input": {
+        "name": "invoice_no",
+        "type": "text",
+        "label": "Invoice No.",
+        "class": "form-control",
+        "div": "col-md-3"
+      },
+      "condition": "inv.no = '$invoice_no'"
+    },
+    "project_name": {
+      "type": "text",
+      "input": {
+        "name": "project_name",
+        "type": "text",
+        "label": "اسم المشروع",
+        "class": "form-control",
+        "div": "col-md-2"
+      },
+      "condition": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'Project' AND inv.id = invoice_id) = '$project_name'"
+    },
+    "po_no": {
+      "type": "text",
+      "input": {
+        "name": "po_no",
+        "type": "text",
+        "label": "رقم أمر الشراء",
+        "class": "form-control",
+        "div": "col-md-2"
+      },
+      "condition": "(SELECT value FROM `invoice_custom_fields` WHERE label = 'PO Number' AND inv.id = invoice_id) = '$po_no'"
+    }
+  },
+  "group_by": {
+    "Yearly": "DATE_FORMAT(inv.date,'%Y')",
+    "Monthly": "CONCAT(YEAR(inv.date), \"-\", LPAD(MONTH(inv.date), 2, 0))",
+    "Weekly": "DATE_ADD(inv.date, INTERVAL (0 - WEEKDAY(inv.date)) DAY)",
+    "Daily": "inv.date"
+  },
+  "has_summary": false,
+  "order_by": {
+    "Date Descending": "inv.date DESC",
+    "Date Ascending": "inv.date ASC",
+    "Number Descending": "inv.no DESC",
+    "Number Ascending": "inv.no ASC"
+  },
+  "default_group_by": "inv.id"
+}
