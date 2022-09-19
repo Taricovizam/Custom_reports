@@ -1,0 +1,1 @@
+Link to client's account where the report was implemented:: https://ikiazmore.daftra.com/owner/invoices/index?reset=1
