@@ -1,0 +1,54 @@
+{
+  "modelName": "Invoice",
+  "title": "Status Count",
+  "table": "invoices",
+  "custom_table": "invoices",
+  "alias": "",
+
+  "fields": {
+    "statuss": {
+      "query": "CASE follow_up_status WHEN '262' THEN 'اخر النهار' WHEN '275' THEN '-الفواتير المرحلة - اسراء' WHEN '288' THEN 'فواتير مرحلة شركات توصيل' WHEN '214' THEN 'ما برد على التلفون' WHEN '123' THEN 'يجب التجهيز' WHEN '419' THEN 'يجب التجهيز جو GO' WHEN '420' THEN 'يجب التركيب' WHEN '241' THEN 'زبون اعتمد الطلب يجب تحميل' WHEN '264' THEN 'لمراجعة اسراء' WHEN '208' THEN 'لمراجعة الادارة' WHEN '268' THEN 'لمراجعة جهاد' WHEN '195' THEN 'تم' WHEN '20' THEN 'فواتير قديمة' WHEN '19' THEN 'فواتير ملغية' WHEN '409' THEN 'بانتظار تاكيد الطلب من الزبون / او بانتظار العربون من الزبون' WHEN '410' THEN 'زبون بده يستلم من المعرض' WHEN '292' THEN 'الزبون ماجل الاستلام حاليا' WHEN '49' THEN 'المدار' WHEN '368' THEN 'شحن الشمال جميل حمدان' WHEN '392' THEN 'نص شحن ابو شوشة' WHEN '222' THEN 'اريحا | العيزرية' WHEN '98' THEN 'القدس' WHEN '15' THEN 'بيت لحم | بيت جالا' WHEN '164' THEN 'جنين' WHEN '16' THEN 'قلقيلية | طولكرم | سلفيت' WHEN '21' THEN 'قواسمي' WHEN '12' THEN 'نابلس' WHEN '312' THEN 'ينتظر توصيل GO' WHEN '416' THEN 'تويوتا' WHEN '422' THEN 'كونتينر 193 اسبوع' WHEN '424' THEN 'كونتينر 194 اسبوعين' WHEN '427' THEN 'كونتينر 195 تحت العمل' WHEN '369' THEN 'كونتينر بدون رقم منتجات مقطوعة بعيد' WHEN '426' THEN 'كونتينر تبرويرات' WHEN '423' THEN 'كونتينر ترتر 1' WHEN '425' THEN 'كونتينر ترتر 2' WHEN '232' THEN ' أرصدة زبائن' WHEN '313' THEN 'مصاري مع GO' WHEN '391' THEN 'مصاري مع ابو شوشة' WHEN '407' THEN 'مصاري مع الشمال جميل حمدان' WHEN '118' THEN 'مصاري مع الشوفير' ELSE 'بدون حالة' END statuss",
+      "type": ""
+    },
+    "all_count": {
+      "query": "COUNT(*) all_count",
+      "type": ""
+    },
+    "currency_code": {
+      "query": "currency_code"
+    }
+  },
+  "currency": {
+    "field": "currency_code",
+    "filter_field": "currency_code",
+    "convert_fields": []
+  },
+
+  "display_fields": {
+    "statuss": "Status",
+    "all_count": "العدد"
+  },
+
+  "allow_removed": true,
+  "removed_text": "",
+  "group_fields": {},
+  "total_fields": {},
+
+  "joins": [],
+
+  "conditions": [],
+  "group_by": {
+    "Yearly": "",
+    "Monthly": "",
+    "Weekly": "",
+    "Daily": ""
+  },
+  "has_summary": false,
+  "order_by": {
+    "Date Descending": "",
+    "Date Ascending": "",
+    "Number Descending": "",
+    "Number Ascending": ""
+  },
+  "default_group_by": "statuss"
+}
