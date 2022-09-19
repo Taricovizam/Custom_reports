@@ -1,0 +1,1 @@
+Link to client's account where the report was implemented:: https://cebe.daftra.com/owner/reports/list/#invoices
